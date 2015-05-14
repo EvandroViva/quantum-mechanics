@@ -10,21 +10,67 @@ import UIKit
 import QuartzCore
 import SceneKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SCNPhysicsContactDelegate, SCNSceneRendererDelegate{
 
+    
+    var texture: SCNNode!
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.dae")!
+        let scene = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
+        
+        let ship = scene.rootNode.childNodeWithName("SketchUp", recursively: true)!
+        scene.physicsWorld.contactDelegate = self
+        ship.scale = SCNVector3Make(0.2, 0.2, 0.2)
+        ship.position = SCNVector3Make(0, -2.8, 0)
+        let moduleScene = SCNScene(named: "art.scnassets/module.dae")!
+        let module = moduleScene.rootNode.childNodeWithName("SketchUp", recursively: true)!
+        module.scale = SCNVector3Make(0.2, 0.2, 0.2)
+        module.position = SCNVector3Make(0, -2.8, 0)
+        scene.rootNode.addChildNode(module)
+
+        let wall1 = scene.rootNode.childNodeWithName("1", recursively: true)!
+        wall1.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: nil)
+        let wall2 = scene.rootNode.childNodeWithName("2", recursively: true)!
+        wall1.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: nil)
+        let wall3 = scene.rootNode.childNodeWithName("3", recursively: true)!
+        wall1.physicsBody = SCNPhysicsBody(type: SCNPhysicsBodyType.Kinematic, shape: nil)
+//        let texture1 = scene.rootNode.childNodeWithName("t1", recursively: true)!
+        texture = scene.rootNode.childNodeWithName("fade", recursively: true)!
+        
+        let texture2 = scene.rootNode.childNodeWithName("x", recursively: true)!
+        texture2.scale = SCNVector3Make(1, 0.17, 1)
+        texture2.position = SCNVector3Make(texture2.position.x, texture2.position.y + 8, texture2.position.z)
+        
+        //texture1.geometry?.firstMaterial?.diffuse. = true
+//        texture.scale = SCNVector3Make(1, 0.3, 1)
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
         
+        let particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
+        particles.affectedByPhysicsFields = true
+        var arrayOfNodes = NSMutableArray()
+        arrayOfNodes.addObject(wall1)
+        arrayOfNodes.addObject(wall2)
+        arrayOfNodes.addObject(wall3)
+//        arrayOfNodes.addObject(backWall)
+        particles.colliderNodes = arrayOfNodes as [AnyObject]
+        println(particles.colliderNodes?.count)
+        
+
+        let atomsNode = SCNNode()
+        atomsNode.addParticleSystem(particles)
+        
+        scene.rootNode.addChildNode(atomsNode)
+        
+        
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        cameraNode.position = SCNVector3(x: 0, y: 5, z: 15)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -41,10 +87,10 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // retrieve the ship node
-        let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
+        //let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
         
         // animate the 3d object
-        ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
+        //ship.runAction(SCNAction.repeatActionForever(SCNAction.rotateByX(0, y: 2, z: 0, duration: 1)))
         
         // retrieve the SCNView
         let scnView = self.view as! SCNView
@@ -60,6 +106,7 @@ class GameViewController: UIViewController {
         
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
+        scnView.delegate = self
         
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
@@ -69,6 +116,13 @@ class GameViewController: UIViewController {
             gestureRecognizers.extend(existingGestureRecognizers)
         }
         scnView.gestureRecognizers = gestureRecognizers
+    }
+    var alphaValue = CGFloat(1)
+    func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+        if alphaValue > 0{
+            alphaValue -= 0.0005
+            texture.opacity = alphaValue
+        }
     }
     
     func handleTap(gestureRecognize: UIGestureRecognizer) {
@@ -105,6 +159,15 @@ class GameViewController: UIViewController {
                 SCNTransaction.commit()
             }
         }
+    }
+    
+
+    
+    func physicsWorld(world: SCNPhysicsWorld, didBeginContact contact: SCNPhysicsContact){
+        
+        
+        
+       println("hit")
     }
     
     override func shouldAutorotate() -> Bool {
