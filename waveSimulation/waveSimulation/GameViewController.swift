@@ -17,10 +17,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     var floorNode: SCNNode!
     var wave: SCNTorus!
     var waveNode: SCNNode!
+    var arrayOfWaves = NSMutableArray()
     
     var waveArray = NSMutableArray()
     var nodesArray = NSMutableArray()
     var counter = 0
+    var frame = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,8 +38,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         // create a new scene
         scene = SCNScene(named: "art.scnassets/Quantum2.dae")!
         let room = scene.rootNode.childNodeWithName("SketchUp", recursively: true)!
-        room.scale = SCNVector3Make(0.2, 0.2, 0.2)
-        room.position.y -= 5
+        room.scale = SCNVector3Make(0.2, 0.2, 0.17)
+        room.position.z += 36
+        room.position.x += 3.5
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -49,7 +52,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 70, y: 17, z: -15)
+        cameraNode.position = SCNVector3(x: 70, y: 17, z: 35)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -65,6 +68,21 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
         
+        
+        for var i = 1; i < 16; ++i{
+            
+            var x = SCNScene(named: "art.scnassets/Frames/\(i).dae")!
+            var waveNode1 = x.rootNode.childNodeWithName("Cube", recursively: true)!
+            var waveNode2 = x.rootNode.childNodeWithName("Plane", recursively: true)!
+            
+            var waveNode = SCNNode()
+            waveNode.addChildNode(waveNode1)
+            waveNode.addChildNode(waveNode2)
+            arrayOfWaves.addObject(waveNode)
+            
+            println(i)
+        }
+        
         // retrieve the ship node
         //let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
         
@@ -73,10 +91,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         texture = scene.rootNode.childNodeWithName("wall", recursively: true)!
         
-        spawnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawn2Waves"), userInfo: nil, repeats: true)
+        //spawnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawn2Waves"), userInfo: nil, repeats: true)
+        
         var ready = NSTimer.scheduledTimerWithTimeInterval(6, target: self, selector: Selector("readyToWave"), userInfo: nil, repeats: true)
         
-        var sp2awnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawnWave"), userInfo: nil, repeats: true)
+        //var sp2awnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawnWave"), userInfo: nil, repeats: true)
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.08, target: self, selector: Selector("updateWave"), userInfo: nil, repeats: true)
         
         let point = scene.rootNode.childNodeWithName("point", recursively: true)!
         
@@ -99,7 +120,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         scnView.backgroundColor = UIColor.blackColor()
         scnView.delegate = self
         
-        setupFloor()
+        //setupFloor()
         
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
@@ -110,6 +131,34 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         }
         scnView.gestureRecognizers = gestureRecognizers
         scnView.pointOfView = cameraNode
+    }
+    
+    func updateWave(){
+        
+        
+        if frame == 0{
+            var toRemove = arrayOfWaves.objectAtIndex(14) as! SCNNode
+            toRemove.removeFromParentNode()
+        }
+        
+        var waveNode = arrayOfWaves.objectAtIndex(frame) as! SCNNode
+        scene.rootNode.addChildNode(waveNode)
+        
+        if frame > 0{
+            var toRemove = arrayOfWaves.objectAtIndex(frame - 1) as! SCNNode
+            toRemove.removeFromParentNode()
+        }
+        
+        
+        
+        
+        if frame < 14{
+            
+            frame += 1
+        }else{
+            
+            frame = 0
+        }
     }
     
     func readyToWave(){
@@ -142,7 +191,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         var waveNode = SCNNode(geometry: wave)
         waveNode.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 1, green: 0.4, blue: 0.4, alpha: 1)
         
-        waveNode.position = SCNVector3Make(0, -3.4, 0)
+        waveNode.position = SCNVector3Make(0, 0, 0)
         nodesArray.replaceObjectAtIndex(counter2, withObject: waveNode)
         if counter2 < 20 {
             counter2++
@@ -208,7 +257,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         floorNode.geometry?.firstMaterial?.diffuse.wrapS = SCNWrapMode.Repeat
         floorNode.geometry?.firstMaterial?.diffuse.wrapT = SCNWrapMode.Repeat
         floorNode.geometry?.firstMaterial?.diffuse.mipFilter = SCNFilterMode.Linear
-        floorNode.position = SCNVector3Make(0, -4, 0)
+        floorNode.position = SCNVector3Make(0, 0, 0)
         scene.rootNode.addChildNode(floorNode)
     }
     
