@@ -18,11 +18,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     var wave: SCNTorus!
     var waveNode: SCNNode!
     var arrayOfWaves = NSMutableArray()
+    var cameraNode: SCNNode!
     
     var waveArray = NSMutableArray()
     var nodesArray = NSMutableArray()
     var counter = 0
     var frame = 0
+    
+    var cameraPoint = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +38,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         for var i = 0; i < 21; ++i{
             array2Waves.addObject(SCNNode())
         }
+        
+        
+        
         // create a new scene
         scene = SCNScene(named: "art.scnassets/Quantum2.dae")!
         let room = scene.rootNode.childNodeWithName("SketchUp", recursively: true)!
@@ -43,16 +49,38 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         room.position.x += 3.5
         
         // create and add a camera to the scene
-        let cameraNode = SCNNode()
+        cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
         cameraNode.camera?.xFov = 60
         cameraNode.camera?.zFar = 200
         scene.rootNode.addChildNode(cameraNode)
         
         
+        let scene2 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
+        let electron = scene2.rootNode.childNodeWithName("electro", recursively: true)!
+        
+        electron.position = SCNVector3(x: 65, y: 0, z: 0)
+        electron.scale = SCNVector3Make(0.9, 0.9, 0.9)
+        scene.rootNode.addChildNode(electron)
+        
+        let spin = CABasicAnimation(keyPath: "rotation")
+        spin.fromValue = NSValue(SCNVector4: SCNVector4(x: 1, y: 1, z: 0, w: 0))
+        spin.toValue = NSValue(SCNVector4: SCNVector4(x: 1, y:1, z: 0, w: 2 * Float(M_PI)))
+        spin.duration = 2
+        spin.repeatCount = .infinity
+        electron.addAnimation(spin, forKey: "spin around")
+        
+         let scene3 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
+        let electron2 = scene3.rootNode.childNodeWithName("electro", recursively: true)!
+        electron2.addAnimation(spin, forKey: "spin around")
+        
+        electron2.position = SCNVector3(x: 75, y: 0, z: 0)
+        electron2.scale = SCNVector3Make(0.9, 0.9, 0.9)
+        scene.rootNode.addChildNode(electron2)
+        
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 70, y: 17, z: 35)
+        cameraNode.position = SCNVector3(x: 70, y: 0, z: 15)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -83,6 +111,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
             println(i)
         }
         
+        
+        for var i = 1; i < 3; ++i{
+            let electron = scene.rootNode.childNodeWithName("\(i)", recursively: true)!
+            electron.hidden = true
+            let orbit = scene.rootNode.childNodeWithName("orbit\(i)", recursively: true)!
+            orbit.hidden = true
+        }
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector: Selector("leap"), userInfo: nil, repeats: true)
+        
         // retrieve the ship node
         //let ship = scene.rootNode.childNodeWithName("ship", recursively: true)!
         
@@ -97,13 +135,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         //var sp2awnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawnWave"), userInfo: nil, repeats: true)
         
-        var timer = NSTimer.scheduledTimerWithTimeInterval(0.08, target: self, selector: Selector("updateWave"), userInfo: nil, repeats: true)
+        var timerx = NSTimer.scheduledTimerWithTimeInterval(0.08, target: self, selector: Selector("updateWave"), userInfo: nil, repeats: true)
         
         let point = scene.rootNode.childNodeWithName("point", recursively: true)!
         
-        cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+        //cameraNode.constraints = [SCNLookAtConstraint(target: electron)] // pov is the camera
         
-        
+        //let sceneroom = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         // retrieve the SCNView
         let scnView = self.view as! SCNView
         
@@ -131,6 +169,81 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         }
         scnView.gestureRecognizers = gestureRecognizers
         scnView.pointOfView = cameraNode
+    }
+    
+    var layerCounter = 1
+    func leap(){
+        
+        if layerCounter == 1{
+            let electron2 = scene.rootNode.childNodeWithName("3", recursively: true)!
+            let orbit2 = scene.rootNode.childNodeWithName("orbit3", recursively: true)!
+            electron2.hidden = false
+            orbit2.hidden = false
+        }else{
+            let electron2 = scene.rootNode.childNodeWithName("\(layerCounter - 1)", recursively: true)!
+            let orbit2 = scene.rootNode.childNodeWithName("orbit\(layerCounter - 1)", recursively: true)!
+            electron2.hidden = false
+            orbit2.hidden = false
+        }
+        
+        
+        if layerCounter < 3{
+            layerCounter += 1
+        }else{
+            layerCounter = 1
+        }
+        
+        
+        
+        let electron = scene.rootNode.childNodeWithName("\(layerCounter)", recursively: true)!
+        let orbit = scene.rootNode.childNodeWithName("orbit\(layerCounter)", recursively: true)!
+        electron.hidden = true
+        orbit.hidden = true
+    }
+    
+    
+    
+    
+    func changeCameraView(){
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationDuration(0.5)
+        
+        // on completion - unhighlight
+        SCNTransaction.setCompletionBlock {
+            SCNTransaction.begin()
+            SCNTransaction.setAnimationDuration(0.5)
+            
+            //fim
+            switch self.cameraPoint{
+            case 0:
+                self.cameraNode.position = SCNVector3(x: 3.5, y: 15, z: 60)
+                self.cameraPoint = 1
+                self.cameraNode.eulerAngles.x = 0
+            case 1:
+                self.cameraNode.position = SCNVector3(x: 3.5, y: -30, z: 55)
+                self.cameraPoint = 2
+                self.cameraNode.eulerAngles.x = 0
+            case 2:
+                self.cameraNode.position = SCNVector3(x: 3.5, y: 60, z: 15)
+                self.cameraNode.eulerAngles.x = 0
+                self.cameraPoint = 3
+            case 3:
+                self.cameraNode.position = SCNVector3(x: 70, y: 17, z: 35)
+                self.cameraPoint = 0
+                self.cameraNode.eulerAngles.x = 0
+            default:
+                break
+            }
+            let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
+            
+            self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+            
+            SCNTransaction.commit()
+        }
+        
+        //meio
+        
+        SCNTransaction.commit()
     }
     
     func updateWave(){
@@ -263,38 +376,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     
     func handleTap(gestureRecognize: UIGestureRecognizer) {
         // retrieve the SCNView
-        let scnView = self.view as! SCNView
         
-        // check what nodes are tapped
-        let p = gestureRecognize.locationInView(scnView)
-        if let hitResults = scnView.hitTest(p, options: nil) {
-            // check that we clicked on at least one object
-            if hitResults.count > 0 {
-                // retrieved the first clicked object
-                let result: AnyObject! = hitResults[0]
-                
-                // get its material
-                let material = result.node!.geometry!.firstMaterial!
-                
-                // highlight it
-                SCNTransaction.begin()
-                SCNTransaction.setAnimationDuration(0.5)
-                
-                // on completion - unhighlight
-                SCNTransaction.setCompletionBlock {
-                    SCNTransaction.begin()
-                    SCNTransaction.setAnimationDuration(0.5)
-                    
-                    material.emission.contents = UIColor.blackColor()
-                    
-                    SCNTransaction.commit()
-                }
-                
-                material.emission.contents = UIColor.redColor()
-                
-                SCNTransaction.commit()
-            }
-        }
+        changeCameraView()
+        
+       
     }
     
     override func shouldAutorotate() -> Bool {
