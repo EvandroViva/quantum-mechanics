@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2015-05-26T12:31:36Z</created>
-  <modified>2015-05-26T12:31:36Z</modified>
+  <created>2015-05-27T13:31:21Z</created>
+  <modified>2015-05-27T13:31:21Z</modified>
   <unit meter="0.025400"/>
   <up_axis>Z_UP</up_axis>
  </asset>
@@ -1049,15 +1049,10 @@
          </technique_common>
         </bind_material>
        </instance_geometry>
-       <extra>
-        <technique profile="SceneKit">
-         <opacity>0</opacity>
-        </technique>
-       </extra>
       </node>
      </node>
      <node id="ID116" name="group_13">
-      <matrix>6.2662 0 0 14.20506 0 1.057056 0 -4.836792 0 0 1.39 -23.94196 0 0 0 1 </matrix>
+      <matrix>6.2662 0 0 14.20506 0 1.057056 0 -4.836792 0 0 1.2788 -11.25443 0 0 0 1 </matrix>
       <instance_geometry url="#ID117">
        <bind_material>
         <technique_common>

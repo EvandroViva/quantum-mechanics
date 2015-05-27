@@ -30,8 +30,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var Menu: UIView!
     var leftButton: UIButton!
     var rightButton: UIButton!
-    
-
+    var center: SCNNode!
+    var electron: SCNNode!
     var scnView: SCNView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +63,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         
         let scene2 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
-        let electron = scene2.rootNode.childNodeWithName("electro", recursively: true)!
+        electron = scene2.rootNode.childNodeWithName("electro", recursively: true)!
         
         electron.position = SCNVector3(x: 65, y: 0, z: 0)
         electron.scale = SCNVector3Make(0.9, 0.9, 0.9)
@@ -87,6 +87,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         // place the camera
         cameraNode.position = SCNVector3(x: 70, y: 0, z: 15)
+        
+        center = SCNNode()
+        center.position = SCNVector3(x: 70, y: 0, z: 0)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -116,6 +119,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             println(i)
         }
+        
         
         
         for var i = 1; i < 3; ++i{
@@ -166,14 +170,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         //setupFloor()
         
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
-        var gestureRecognizers = [AnyObject]()
-        gestureRecognizers.append(tapGesture)
-        if let existingGestureRecognizers = scnView.gestureRecognizers {
-            gestureRecognizers.extend(existingGestureRecognizers)
-        }
-        scnView.gestureRecognizers = gestureRecognizers
+        
         scnView.pointOfView = cameraNode
         
         if Menu == nil{
@@ -200,25 +197,82 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         
         
-        cameraButton = UIButton(frame : CGRect(x:screenWidth - 54, y: 10, width: 44, height:44 ))
-        //let img = UIImage(named: "camera.jpg")! as UIImage
-        //cameraButton.setImage(img, forState: UIControlState.Normal)
-        cameraButton.backgroundColor = UIColor.grayColor()
+        cameraButton = UIButton(frame : CGRect(x:screenWidth - 80, y: 10, width: 60, height:60 ))
+        cameraButton.backgroundColor = UIColor.clearColor()
         cameraButton.addTarget(self, action: "changeCameraView", forControlEvents:.TouchUpInside)
+        var attrs = [NSFontAttributeName : UIFont.systemFontOfSize(25.0)]
+        
+        
+        let img = UIImage(named: "camera.png")! as UIImage
+        cameraButton.setImage(img, forState: UIControlState.Normal)
         self.view.addSubview(cameraButton)
         
         let scene4 = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         
         wallX = scene4.rootNode.childNodeWithName("fade", recursively: true)!
         
+        
+        backButton = UIButton(frame : CGRect(x: 10, y: 10, width: 90, height:60 ))
+        backButton.backgroundColor = UIColor.grayColor()
+        backButton.setAttributedTitle(NSMutableAttributedString(string: "Menu", attributes: attrs), forState: UIControlState.Normal)
+        backButton.addTarget(self, action: "openMenu", forControlEvents:.TouchUpInside)
+        self.view.addSubview(backButton)
+        
+      
+        backButton.hidden = true
+        cameraButton.hidden = true
+        
     }
+    
+    func moveToExperiment2(){
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationDuration(0.5)
+        self.cameraNode.position = SCNVector3(x: 3.5, y: 15, z: 60)
+        self.cameraPoint = 1
+        let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
+        self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+        readyToWave()
+        SCNTransaction.commit()
+    }
+    
+    func openMenu(){
+        cameraNode.position = SCNVector3(x: 70, y: 0, z: 15)
+        self.cameraNode.eulerAngles.x = 0
+        self.cameraNode.eulerAngles.y = 0
+        self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
+        rightButton.enabled = true
+        leftButton.enabled = true
+        rightButton.hidden = false
+        leftButton.hidden = false
+        backButton.hidden = true
+        cameraButton.hidden = true
+    }
+    
+    var backButton: UIButton!
+    
     
     func leftButtonClick(){
         print("l")
+        rightButton.enabled = false
+        leftButton.enabled = false
+        rightButton.hidden = true
+        leftButton.hidden = true
+        backButton.hidden = false
+        cameraButton.hidden = false
+        moveToExperiment2()
+        
     }
     
     func rightButtonClick(){
         print("r")
+        rightButton.enabled = false
+        leftButton.enabled = false
+        rightButton.hidden = true
+        leftButton.hidden = true
+        
+        backButton.hidden = false
+        cameraButton.hidden = false
+        moveToExperiment1()
     }
     
     var cameraButton: UIButton!
@@ -237,7 +291,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let wall1 = scene4.rootNode.childNodeWithName("wall1", recursively: true)!
         let wall2 = scene4.rootNode.childNodeWithName("wall2", recursively: true)!
         let wall3 = scene4.rootNode.childNodeWithName("wall3", recursively: true)!
-        
+        let center = scene4.rootNode.childNodeWithName("x", recursively: true)!
+        self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
         let particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
         particles.affectedByPhysicsFields = true
         var arrayOfNodes = NSMutableArray()
@@ -300,34 +355,35 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     func changeCameraView(){
       
-            SCNTransaction.begin()
-            SCNTransaction.setAnimationDuration(0.5)
+        
             
             //fim
             switch self.cameraPoint{
             case 0:
                 self.cameraNode.position = SCNVector3(x: 3.5, y: 15, z: 60)
+                self.cameraNode.eulerAngles.x = 0
                 self.cameraPoint = 1
             case 1:
                 self.cameraNode.position = SCNVector3(x: 3.5, y: -30, z: 55)
+                self.cameraNode.eulerAngles.x = 0
                 self.cameraPoint = 2
             case 2:
                 self.cameraNode.position = SCNVector3(x: 3.5, y: 60, z: 15)
                 self.cameraPoint = 3
+                self.cameraNode.eulerAngles.x = 0
             case 3:
                 self.cameraNode.position = SCNVector3(x: 70, y: 17, z: 35)
                 self.cameraPoint = 0
+                
+                self.cameraNode.eulerAngles.x = 25.5
             default:
                 break
             }
-            let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
         
-            self.cameraNode.eulerAngles.x = 0
-            self.cameraNode.eulerAngles.y = 90
-            self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
-            
-            SCNTransaction.commit()
-       
+     
+        let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
+        self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+
     }
     
     func updateWave(){
@@ -359,6 +415,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     }
     
     func readyToWave(){
+        alphaValue = CGFloat(1)
         delay = 400;
     }
     
@@ -459,13 +516,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scene.rootNode.addChildNode(floorNode)
     }
     
-    func handleTap(gestureRecognize: UIGestureRecognizer) {
-        // retrieve the SCNView
-        
-        //changeCameraView()
-        moveToExperiment1()
-       
-    }
+    
     
     override func shouldAutorotate() -> Bool {
         return true
