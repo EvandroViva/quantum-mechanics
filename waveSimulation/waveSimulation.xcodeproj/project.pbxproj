@@ -14,6 +14,8 @@
 		8B99579E1B0B507D009A11B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B99579D1B0B507D009A11B2 /* Images.xcassets */; };
 		8B9957A11B0B507D009A11B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B99579F1B0B507D009A11B2 /* LaunchScreen.xib */; };
 		8B9957AD1B0B507D009A11B2 /* waveSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9957AC1B0B507D009A11B2 /* waveSimulationTests.swift */; };
+		8BCC06841B15E3DB0048E5D7 /* atoms.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 8BCC06831B15E3DB0048E5D7 /* atoms.scnp */; };
+		8BCC06861B15E5E70048E5D7 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCC06851B15E5E70048E5D7 /* bokeh.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		8B9957A61B0B507D009A11B2 /* waveSimulationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = waveSimulationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9957AB1B0B507D009A11B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B9957AC1B0B507D009A11B2 /* waveSimulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = waveSimulationTests.swift; sourceTree = "<group>"; };
+		8BCC06831B15E3DB0048E5D7 /* atoms.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = atoms.scnp; sourceTree = "<group>"; };
+		8BCC06851B15E5E70048E5D7 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,8 @@
 		8B9957911B0B507D009A11B2 /* waveSimulation */ = {
 			isa = PBXGroup;
 			children = (
+				8BCC06831B15E3DB0048E5D7 /* atoms.scnp */,
+				8BCC06851B15E5E70048E5D7 /* bokeh.png */,
 				8B9957941B0B507D009A11B2 /* AppDelegate.swift */,
 				8B9957961B0B507D009A11B2 /* art.scnassets */,
 				8B9957981B0B507D009A11B2 /* GameViewController.swift */,
@@ -198,7 +204,9 @@
 				8B9957A11B0B507D009A11B2 /* LaunchScreen.xib in Resources */,
 				8B99579E1B0B507D009A11B2 /* Images.xcassets in Resources */,
 				8B9957971B0B507D009A11B2 /* art.scnassets in Resources */,
+				8BCC06841B15E3DB0048E5D7 /* atoms.scnp in Resources */,
 				8B99579C1B0B507D009A11B2 /* Main.storyboard in Resources */,
+				8BCC06861B15E5E70048E5D7 /* bokeh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
