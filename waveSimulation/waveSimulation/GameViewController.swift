@@ -10,7 +10,7 @@ import UIKit
 import QuartzCore
 import SceneKit
 
-class GameViewController: UIViewController, SCNSceneRendererDelegate {
+class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysicsContactDelegate {
 
     
     var scene: SCNScene!
@@ -26,12 +26,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     var frame = 0
     
     var cameraPoint = 0
-    
+
     var Menu: UIView!
     var leftButton: UIButton!
     var rightButton: UIButton!
     
-    
+
+    var scnView: SCNView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -136,7 +137,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         //spawnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawn2Waves"), userInfo: nil, repeats: true)
         
-        var ready = NSTimer.scheduledTimerWithTimeInterval(6, target: self, selector: Selector("readyToWave"), userInfo: nil, repeats: true)
+        //var ready = NSTimer.scheduledTimerWithTimeInterval(6, target: self, selector: Selector("readyToWave"), userInfo: nil, repeats: true)
         
         //var sp2awnTimer = NSTimer.scheduledTimerWithTimeInterval(0.6, target: self, selector: Selector("spawnWave"), userInfo: nil, repeats: true)
         
@@ -148,16 +149,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         //let sceneroom = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         // retrieve the SCNView
-        let scnView = self.view as! SCNView
+        scnView = self.view as! SCNView
         
         // set the scene to the view
         scnView.scene = scene
         
         // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
+        scnView.allowsCameraControl = false
         
         // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+//        scnView.showsStatistics = true
         
         // configure the view
         scnView.backgroundColor = UIColor.blackColor()
@@ -192,6 +193,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         }
         self.view.addSubview(Menu)
         
+    
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenWidth = screenSize.width;
+        let screenHeight = screenSize.height;
+        
+        
+        
+        cameraButton = UIButton(frame : CGRect(x:screenWidth - 54, y: 10, width: 44, height:44 ))
+        //let img = UIImage(named: "camera.jpg")! as UIImage
+        //cameraButton.setImage(img, forState: UIControlState.Normal)
+        cameraButton.backgroundColor = UIColor.grayColor()
+        cameraButton.addTarget(self, action: "changeCameraView", forControlEvents:.TouchUpInside)
+        self.view.addSubview(cameraButton)
+        
+        
+        
     }
     
     func leftButtonClick(){
@@ -200,6 +217,52 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     
     func rightButtonClick(){
         print("r")
+    }
+    
+    var cameraButton: UIButton!
+    var wallX: SCNNode!
+    func moveToExperiment1(){
+        let scene4 = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
+        
+        wallX = scene4.rootNode.childNodeWithName("fade", recursively: true)!
+        
+        readyToWave()
+        
+        
+        let room = scene4.rootNode.childNodeWithName("SketchUp", recursively: true)!
+        room.scale = SCNVector3Make(0.2, 0.2, 0.2)
+        room.position = SCNVector3Make(140, -2.8, 0)
+        
+        let wall1 = scene4.rootNode.childNodeWithName("wall1", recursively: true)!
+        let wall2 = scene4.rootNode.childNodeWithName("wall2", recursively: true)!
+        let wall3 = scene4.rootNode.childNodeWithName("wall3", recursively: true)!
+        
+        let particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
+        particles.affectedByPhysicsFields = true
+        var arrayOfNodes = NSMutableArray()
+        arrayOfNodes.addObject(wall1)
+        arrayOfNodes.addObject(wall2)
+        arrayOfNodes.addObject(wall3)
+        //        arrayOfNodes.addObject(backWall)
+        particles.colliderNodes = arrayOfNodes as [AnyObject]
+        
+        
+        let atomsNode = SCNNode()
+        atomsNode.addParticleSystem(particles)
+        atomsNode.position.x += 140
+        scene.rootNode.addChildNode(atomsNode)
+        
+        scnView.allowsCameraControl = true
+        scene.rootNode.addChildNode(room)
+        
+        
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationDuration(0.5)
+            //cameraNode.eulerAngles.x = 25
+            cameraNode.position = SCNVector3(x: 140, y: 8, z: 25)
+        
+        SCNTransaction.commit()
+
     }
     
     var layerCounter = 1
@@ -236,11 +299,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     
     
     func changeCameraView(){
-        SCNTransaction.begin()
-        SCNTransaction.setAnimationDuration(0.5)
-        
-        // on completion - unhighlight
-        SCNTransaction.setCompletionBlock {
+      
             SCNTransaction.begin()
             SCNTransaction.setAnimationDuration(0.5)
             
@@ -249,32 +308,26 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
             case 0:
                 self.cameraNode.position = SCNVector3(x: 3.5, y: 15, z: 60)
                 self.cameraPoint = 1
-                self.cameraNode.eulerAngles.x = 0
             case 1:
                 self.cameraNode.position = SCNVector3(x: 3.5, y: -30, z: 55)
                 self.cameraPoint = 2
-                self.cameraNode.eulerAngles.x = 0
             case 2:
                 self.cameraNode.position = SCNVector3(x: 3.5, y: 60, z: 15)
-                self.cameraNode.eulerAngles.x = 0
                 self.cameraPoint = 3
             case 3:
                 self.cameraNode.position = SCNVector3(x: 70, y: 17, z: 35)
                 self.cameraPoint = 0
-                self.cameraNode.eulerAngles.x = 0
             default:
                 break
             }
             let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
-            
+        
+            self.cameraNode.eulerAngles.x = 0
+            self.cameraNode.eulerAngles.y = 90
             self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
             
             SCNTransaction.commit()
-        }
-        
-        //meio
-        
-        SCNTransaction.commit()
+       
     }
     
     func updateWave(){
@@ -321,6 +374,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         if alphaValue > 0 && delay > 560{
             alphaValue -= 0.0005
             texture.opacity = alphaValue
+            wallX.opacity = alphaValue
         }
     }
     
@@ -408,8 +462,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     func handleTap(gestureRecognize: UIGestureRecognizer) {
         // retrieve the SCNView
         
-        changeCameraView()
-        
+        //changeCameraView()
+        moveToExperiment1()
        
     }
     
