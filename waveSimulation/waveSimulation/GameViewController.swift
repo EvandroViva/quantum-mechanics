@@ -27,6 +27,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     
     var cameraPoint = 0
     
+    var Menu: UIView!
+    var leftButton: UIButton!
+    var rightButton: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -169,6 +174,32 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         }
         scnView.gestureRecognizers = gestureRecognizers
         scnView.pointOfView = cameraNode
+        
+        if Menu == nil{
+            let screenSize: CGRect = UIScreen.mainScreen().bounds
+            let screenWidth = screenSize.width;
+            let screenHeight = screenSize.height;
+            
+            Menu = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight ))
+            Menu.backgroundColor = UIColor.clearColor()
+            leftButton = UIButton(frame : CGRect(x:0, y: 0, width: screenWidth/2, height:screenHeight ))
+            leftButton.addTarget(self, action: "leftButtonClick", forControlEvents: .TouchUpInside)
+            Menu.addSubview(leftButton)
+            rightButton = UIButton(frame: CGRect(x: screenWidth/2, y:0, width: screenWidth/2, height:screenHeight))
+            rightButton.addTarget(self, action: "rightButtonClick", forControlEvents:.TouchUpInside)
+            Menu.addSubview(rightButton)
+            
+        }
+        self.view.addSubview(Menu)
+        
+    }
+    
+    func leftButtonClick(){
+        print("l")
+    }
+    
+    func rightButtonClick(){
+        print("r")
     }
     
     var layerCounter = 1
