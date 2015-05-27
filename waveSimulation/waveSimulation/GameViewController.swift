@@ -26,6 +26,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var frame = 0
     
     var cameraPoint = 0
+
+    var Menu: UIView!
+    var leftButton: UIButton!
+    var rightButton: UIButton!
+    
+
     var scnView: SCNView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,6 +176,24 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scnView.gestureRecognizers = gestureRecognizers
         scnView.pointOfView = cameraNode
         
+        if Menu == nil{
+            let screenSize: CGRect = UIScreen.mainScreen().bounds
+            let screenWidth = screenSize.width;
+            let screenHeight = screenSize.height;
+            
+            Menu = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight ))
+            Menu.backgroundColor = UIColor.clearColor()
+            leftButton = UIButton(frame : CGRect(x:0, y: 0, width: screenWidth/2, height:screenHeight ))
+            leftButton.addTarget(self, action: "leftButtonClick", forControlEvents: .TouchUpInside)
+            Menu.addSubview(leftButton)
+            rightButton = UIButton(frame: CGRect(x: screenWidth/2, y:0, width: screenWidth/2, height:screenHeight))
+            rightButton.addTarget(self, action: "rightButtonClick", forControlEvents:.TouchUpInside)
+            Menu.addSubview(rightButton)
+            
+        }
+        self.view.addSubview(Menu)
+        
+    
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         let screenWidth = screenSize.width;
         let screenHeight = screenSize.height;
@@ -188,6 +212,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         wallX = scene4.rootNode.childNodeWithName("fade", recursively: true)!
         
     }
+    
+    func leftButtonClick(){
+        print("l")
+    }
+    
+    func rightButtonClick(){
+        print("r")
+    }
+    
     var cameraButton: UIButton!
     var wallX: SCNNode!
     func moveToExperiment1(){
@@ -229,6 +262,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             cameraNode.position = SCNVector3(x: 140, y: 8, z: 25)
         
         SCNTransaction.commit()
+
     }
     
     var layerCounter = 1
