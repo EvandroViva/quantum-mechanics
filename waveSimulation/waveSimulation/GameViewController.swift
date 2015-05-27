@@ -180,7 +180,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         //let img = UIImage(named: "camera.jpg")! as UIImage
         //cameraButton.setImage(img, forState: UIControlState.Normal)
         cameraButton.backgroundColor = UIColor.grayColor()
-        cameraButton.addTarget(self, action: "changeCamera", forControlEvents:.TouchUpInside)
+        cameraButton.addTarget(self, action: "changeCameraView", forControlEvents:.TouchUpInside)
         self.view.addSubview(cameraButton)
         
         
