@@ -33,6 +33,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var center: SCNNode!
     var electron: SCNNode!
     var scnView: SCNView!
+    
+    var room2: SCNNode!
+    var inExperiment = 0
+    
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -105,20 +112,45 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
         
-        
-        for var i = 1; i < 16; ++i{
+        if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+        {
+            // Ipad
             
-            var x = SCNScene(named: "art.scnassets/Frames/\(i).dae")!
-            var waveNode1 = x.rootNode.childNodeWithName("Cube", recursively: true)!
-            var waveNode2 = x.rootNode.childNodeWithName("Plane", recursively: true)!
-            
-            var waveNode = SCNNode()
-            waveNode.addChildNode(waveNode1)
-            waveNode.addChildNode(waveNode2)
-            arrayOfWaves.addObject(waveNode)
-            
-            println(i)
+            for var i = 1; i < 16; ++i{
+                
+                var x = SCNScene(named: "art.scnassets/Frames/\(i).dae")!
+                var waveNode1 = x.rootNode.childNodeWithName("Cube", recursively: true)!
+                var waveNode2 = x.rootNode.childNodeWithName("Plane", recursively: true)!
+                
+                var waveNode = SCNNode()
+                waveNode.addChildNode(waveNode1)
+                waveNode.addChildNode(waveNode2)
+                arrayOfWaves.addObject(waveNode)
+                
+                println(i)
+            }
         }
+        else
+        {
+            // Iphone
+            
+            for var i = 1; i < 16; ++i{
+                
+                var x = SCNScene(named: "art.scnassets/frames3/\(i).dae")!
+                var waveNode1 = x.rootNode.childNodeWithName("Cube", recursively: true)!
+                var waveNode2 = x.rootNode.childNodeWithName("Plane", recursively: true)!
+                
+                var waveNode = SCNNode()
+                waveNode.addChildNode(waveNode1)
+                waveNode.addChildNode(waveNode2)
+                arrayOfWaves.addObject(waveNode)
+                
+                println(i)
+            }
+            
+            
+        }
+        
         
         
         
@@ -190,17 +222,31 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         }
         self.view.addSubview(Menu)
         
-    
+        var attrs = [NSFontAttributeName : UIFont.systemFontOfSize(25.0)]
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         let screenWidth = screenSize.width;
         let screenHeight = screenSize.height;
         
+        if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+        {
+            // Ipad
+            
+            cameraButton = UIButton(frame : CGRect(x:screenWidth - 80, y: 10, width: 60, height:60 ))
+            backButton = UIButton(frame : CGRect(x: 10, y: 10, width: 90, height:60 ))
+        }
+        else
+        {
+            // Iphone
+            
+            cameraButton = UIButton(frame : CGRect(x:screenWidth - 80, y: 10, width: 50, height:44))
+            backButton = UIButton(frame : CGRect(x: 10, y: 10, width: 60, height: 44))
+            
+            attrs = [NSFontAttributeName : UIFont.systemFontOfSize(20.0)]
+        }
         
-        
-        cameraButton = UIButton(frame : CGRect(x:screenWidth - 80, y: 10, width: 60, height:60 ))
         cameraButton.backgroundColor = UIColor.clearColor()
         cameraButton.addTarget(self, action: "changeCameraView", forControlEvents:.TouchUpInside)
-        var attrs = [NSFontAttributeName : UIFont.systemFontOfSize(25.0)]
+        
         
         
         let img = UIImage(named: "camera.png")! as UIImage
@@ -210,9 +256,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let scene4 = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         
         wallX = scene4.rootNode.childNodeWithName("fade", recursively: true)!
+        room2 = scene4.rootNode.childNodeWithName("SketchUp", recursively: true)
         
         
-        backButton = UIButton(frame : CGRect(x: 10, y: 10, width: 90, height:60 ))
         backButton.backgroundColor = UIColor.grayColor()
         backButton.setAttributedTitle(NSMutableAttributedString(string: "Menu", attributes: attrs), forState: UIControlState.Normal)
         backButton.addTarget(self, action: "openMenu", forControlEvents:.TouchUpInside)
@@ -232,6 +278,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
         self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
         readyToWave()
+        
+        inExperiment = 2
         SCNTransaction.commit()
     }
     
@@ -240,6 +288,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         self.cameraNode.eulerAngles.x = 0
         self.cameraNode.eulerAngles.y = 0
         self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
+        room2.hidden = true
         rightButton.enabled = true
         leftButton.enabled = true
         rightButton.hidden = false
@@ -260,6 +309,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         backButton.hidden = false
         cameraButton.hidden = false
         moveToExperiment2()
+        texture.opacity = 1
         
     }
     
@@ -269,7 +319,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         leftButton.enabled = false
         rightButton.hidden = true
         leftButton.hidden = true
-        
+        wallX.opacity = 1
         backButton.hidden = false
         cameraButton.hidden = false
         moveToExperiment1()
@@ -277,17 +327,21 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     var cameraButton: UIButton!
     var wallX: SCNNode!
+    
+    
+    
     func moveToExperiment1(){
         let scene4 = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         
+        inExperiment = 1
         
         readyToWave()
+
         
-        
-        let room = scene4.rootNode.childNodeWithName("SketchUp", recursively: true)!
-        room.scale = SCNVector3Make(0.2, 0.2, 0.2)
-        room.position = SCNVector3Make(140, -2.8, 0)
-        
+        room2 = scene4.rootNode.childNodeWithName("SketchUp", recursively: true)!
+        room2.scale = SCNVector3Make(0.2, 0.2, 0.2)
+        room2.position = SCNVector3Make(140, -2.8, 0)
+        room2.hidden = false
         let wall1 = scene4.rootNode.childNodeWithName("wall1", recursively: true)!
         let wall2 = scene4.rootNode.childNodeWithName("wall2", recursively: true)!
         let wall3 = scene4.rootNode.childNodeWithName("wall3", recursively: true)!
@@ -308,12 +362,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         atomsNode.position.x += 140
         scene.rootNode.addChildNode(atomsNode)
         
-        scene.rootNode.addChildNode(room)
+        scene.rootNode.addChildNode(room2)
         
+        wallX = scene.rootNode.childNodeWithName("fade", recursively: true)!
+        
+        
+        cameraNode.eulerAngles.x = 0
         
         SCNTransaction.begin()
         SCNTransaction.setAnimationDuration(0.5)
-            //cameraNode.eulerAngles.x = 25
+        
             cameraNode.position = SCNVector3(x: 140, y: 8, z: 25)
         
         SCNTransaction.commit()
@@ -355,7 +413,35 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     func changeCameraView(){
       
+        if inExperiment == 1{
+            //fim
+            switch self.cameraPoint{
+            case 0:
+                self.cameraNode.position = SCNVector3(x: 140, y: 8, z: 25)
+                self.cameraNode.eulerAngles.x = 0
+                self.cameraPoint = 2
+            case 1:
+                self.cameraNode.position = SCNVector3(x: 140, y: 8, z: 25)
+                self.cameraNode.eulerAngles.x = 0
+                self.cameraPoint = 2
+            case 2:
+                self.cameraNode.position = SCNVector3(x: 140, y: 60, z: 15)
+                self.cameraPoint = 3
+                self.cameraNode.eulerAngles.x = 0
+            case 3:
+                self.cameraNode.position = SCNVector3(x: 200, y: 17, z: 35)
+                self.cameraPoint = 0
+                
+                self.cameraNode.eulerAngles.x = 25.5
+            default:
+                break
+            }
+            let point = self.scene.rootNode.childNodeWithName("x", recursively: true)!
+            self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+            
+        }
         
+        if inExperiment == 2{
             
             //fim
             switch self.cameraPoint{
@@ -368,7 +454,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
                 self.cameraNode.eulerAngles.x = 0
                 self.cameraPoint = 2
             case 2:
-                self.cameraNode.position = SCNVector3(x: 3.5, y: 60, z: 15)
+                self.cameraNode.position = SCNVector3(x: 3.5, y: 80, z: 15)
                 self.cameraPoint = 3
                 self.cameraNode.eulerAngles.x = 0
             case 3:
@@ -379,10 +465,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             default:
                 break
             }
+            let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
+            self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+        }
         
-     
-        let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
-        self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
 
     }
     
