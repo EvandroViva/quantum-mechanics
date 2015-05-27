@@ -183,7 +183,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         cameraButton.addTarget(self, action: "changeCameraView", forControlEvents:.TouchUpInside)
         self.view.addSubview(cameraButton)
         
+        let scene4 = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         
+        wallX = scene4.rootNode.childNodeWithName("fade", recursively: true)!
         
     }
     var cameraButton: UIButton!
@@ -191,7 +193,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func moveToExperiment1(){
         let scene4 = SCNScene(named: "art.scnassets/ExperimentRoom.dae")!
         
-        wallX = scene4.rootNode.childNodeWithName("fade", recursively: true)!
         
         readyToWave()
         
@@ -219,7 +220,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         atomsNode.position.x += 140
         scene.rootNode.addChildNode(atomsNode)
         
-        scnView.allowsCameraControl = true
         scene.rootNode.addChildNode(room)
         
         
