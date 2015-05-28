@@ -37,6 +37,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var room2: SCNNode!
     var inExperiment = 0
     
+    var particles: SCNParticleSystem!
+    
 
     
     
@@ -103,7 +105,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
         lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+//        lightNode.light?.color = UIColor.grayColor()
         scene.rootNode.addChildNode(lightNode)
+        
+        var lightNode2: SCNNode = lightNode.clone() as! SCNNode
+        lightNode2.position = SCNVector3(x: 140, y: 10, z: -26)
+        lightNode2.light!.type = SCNLightTypeOmni
+        lightNode.light?.color = UIColor.grayColor()
+        scene.rootNode.addChildNode(lightNode2)
+        
+//        // create and add a third light to the scene
+//        let lightNode3 = SCNNode()
+//        lightNode3.light = SCNLight()
+//        lightNode3.light!.type = SCNLightTypeOmni
+//        lightNode3.position = SCNVector3(x: 70, y: 10, z: 10)
+//        lightNode3.light?.color = UIColor.grayColor()
+//        scene.rootNode.addChildNode(lightNode3)
         
         // create and add an ambient light to the scene
         let ambientLightNode = SCNNode()
@@ -324,21 +341,24 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let wall3 = scene4.rootNode.childNodeWithName("wall3", recursively: true)!
         let center = scene4.rootNode.childNodeWithName("x", recursively: true)!
         self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
-        let particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
-        particles.affectedByPhysicsFields = true
-        var arrayOfNodes = NSMutableArray()
-        arrayOfNodes.addObject(wall1)
-        arrayOfNodes.addObject(wall2)
-        arrayOfNodes.addObject(wall3)
-        //        arrayOfNodes.addObject(backWall)
-        particles.colliderNodes = arrayOfNodes as [AnyObject]
         
+        if(particles == nil)
+        {
+            particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
+            particles.affectedByPhysicsFields = true
+            var arrayOfNodes = NSMutableArray()
+            arrayOfNodes.addObject(wall1)
+            arrayOfNodes.addObject(wall2)
+            arrayOfNodes.addObject(wall3)
+            //        arrayOfNodes.addObject(backWall)
+            particles.colliderNodes = arrayOfNodes as [AnyObject]
+            let atomsNode = SCNNode()
+            atomsNode.addParticleSystem(particles)
+            atomsNode.position.x += 140
+            scene.rootNode.addChildNode(atomsNode)
+        }
         
-        let atomsNode = SCNNode()
-        atomsNode.addParticleSystem(particles)
-        atomsNode.position.x += 140
-        scene.rootNode.addChildNode(atomsNode)
-        
+ 
         scene.rootNode.addChildNode(room2)
         
         wallX = scene.rootNode.childNodeWithName("fade", recursively: true)!
@@ -482,7 +502,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     func readyToWave(){
         alphaValue = CGFloat(1)
-        delay = 400;
+        delay = 600;
     }
     
     var alphaValue = CGFloat(1)
@@ -490,8 +510,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var delay = 0
     var ready = true
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
-        delay += 1
-        
         
         
         if alphaValue > 0 && delay > 560{
