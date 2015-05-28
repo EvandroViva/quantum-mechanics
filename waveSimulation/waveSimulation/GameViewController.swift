@@ -276,8 +276,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         room2 = scene4.rootNode.childNodeWithName("SketchUp", recursively: true)
         
         
-        backButton.backgroundColor = UIColor.grayColor()
-        backButton.setAttributedTitle(NSMutableAttributedString(string: "Menu", attributes: attrs), forState: UIControlState.Normal)
+        backButton.backgroundColor = nil
+        
+        backButton.setAttributedTitle(NSMutableAttributedString(string: "Menu", attributes: attrs ), forState: UIControlState.Normal)
+        backButton.titleLabel?.font = UIFont(name: "calibri", size: 16)
+        backButton.titleLabel?.textColor = UIColor.whiteColor()
         backButton.addTarget(self, action: "openMenu", forControlEvents:.TouchUpInside)
         self.view.addSubview(backButton)
         
