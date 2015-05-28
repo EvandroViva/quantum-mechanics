@@ -86,7 +86,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
          let scene3 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
         let electron2 = scene3.rootNode.childNodeWithName("electro", recursively: true)!
         electron2.addAnimation(spin, forKey: "spin around")
-        
+
         electron2.position = SCNVector3(x: 75, y: 0, z: 0)
         electron2.scale = SCNVector3Make(0.9, 0.9, 0.9)
         scene.rootNode.addChildNode(electron2)
@@ -112,44 +112,21 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         ambientLightNode.light!.color = UIColor.darkGrayColor()
         scene.rootNode.addChildNode(ambientLightNode)
         
-        if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad)
-        {
-            // Ipad
+        
+        
+        
+        
+        
+        
+       
+ 
             
             for var i = 1; i < 16; ++i{
                 
-                var x = SCNScene(named: "art.scnassets/Frames/\(i).dae")!
-                var waveNode1 = x.rootNode.childNodeWithName("Cube", recursively: true)!
-                var waveNode2 = x.rootNode.childNodeWithName("Plane", recursively: true)!
-                
-                var waveNode = SCNNode()
-                waveNode.addChildNode(waveNode1)
-                waveNode.addChildNode(waveNode2)
-                arrayOfWaves.addObject(waveNode)
-                
+                arrayOfWaves.addObject(SCNScene(named: "art.scnassets/frames/\(i).dae")!.rootNode)
                 println(i)
             }
-        }
-        else
-        {
-            // Iphone
-            
-            for var i = 1; i < 16; ++i{
-                
-                var x = SCNScene(named: "art.scnassets/frames3/\(i).dae")!
-                var waveNode1 = x.rootNode.childNodeWithName("Cube", recursively: true)!
-                var waveNode2 = x.rootNode.childNodeWithName("Plane", recursively: true)!
-                
-                var waveNode = SCNNode()
-                waveNode.addChildNode(waveNode1)
-                waveNode.addChildNode(waveNode2)
-                arrayOfWaves.addObject(waveNode)
-                
-                println(i)
-            }
-            
-            
-        }
+        
         
         
         
@@ -481,6 +458,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         }
         
         var waveNode = arrayOfWaves.objectAtIndex(frame) as! SCNNode
+        
+
+
         scene.rootNode.addChildNode(waveNode)
         
         if frame > 0{
