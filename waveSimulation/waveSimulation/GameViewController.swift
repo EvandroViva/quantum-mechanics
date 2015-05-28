@@ -105,14 +105,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
         lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-        lightNode.light?.color = UIColor.grayColor()
+//        lightNode.light?.color = UIColor.grayColor()
         scene.rootNode.addChildNode(lightNode)
         
         var lightNode2: SCNNode = lightNode.clone() as! SCNNode
-        lightNode2.position = SCNVector3(x: 140, y: 10, z: 10)
+        lightNode2.position = SCNVector3(x: 140, y: 10, z: -26)
         lightNode2.light!.type = SCNLightTypeOmni
         lightNode.light?.color = UIColor.grayColor()
-        //scene.rootNode.addChildNode(lightNode2)
+        scene.rootNode.addChildNode(lightNode2)
         
 //        // create and add a third light to the scene
 //        let lightNode3 = SCNNode()
