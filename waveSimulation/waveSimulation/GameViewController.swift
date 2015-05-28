@@ -366,6 +366,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             scene.rootNode.addChildNode(atomsNode)
         }
         
+ 
         scene.rootNode.addChildNode(room2)
         
         wallX = scene.rootNode.childNodeWithName("fade", recursively: true)!
@@ -506,7 +507,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     func readyToWave(){
         alphaValue = CGFloat(1)
-        delay = 400;
+        delay = 600;
     }
     
     var alphaValue = CGFloat(1)
@@ -514,8 +515,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var delay = 0
     var ready = true
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
-        delay += 1
-        
         
         
         if alphaValue > 0 && delay > 560{
