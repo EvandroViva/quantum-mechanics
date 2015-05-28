@@ -402,7 +402,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         wallX = scene.rootNode.childNodeWithName("fade", recursively: true)!
         
         
-        cameraNode.eulerAngles.x = 0
+        //cameraNode.eulerAngles.x = 0
         
         SCNTransaction.begin()
         SCNTransaction.setAnimationDuration(0.5)
