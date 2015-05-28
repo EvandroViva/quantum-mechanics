@@ -37,6 +37,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var room2: SCNNode!
     var inExperiment = 0
     
+    var particles: SCNParticleSystem!
+    
 
     
     
@@ -347,20 +349,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let wall3 = scene4.rootNode.childNodeWithName("wall3", recursively: true)!
         let center = scene4.rootNode.childNodeWithName("x", recursively: true)!
         self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
-        let particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
-        particles.affectedByPhysicsFields = true
-        var arrayOfNodes = NSMutableArray()
-        arrayOfNodes.addObject(wall1)
-        arrayOfNodes.addObject(wall2)
-        arrayOfNodes.addObject(wall3)
-        //        arrayOfNodes.addObject(backWall)
-        particles.colliderNodes = arrayOfNodes as [AnyObject]
         
-        
-        let atomsNode = SCNNode()
-        atomsNode.addParticleSystem(particles)
-        atomsNode.position.x += 140
-        scene.rootNode.addChildNode(atomsNode)
+        if(particles == nil)
+        {
+            particles = SCNParticleSystem(named: "atoms.scnp", inDirectory: "")
+            particles.affectedByPhysicsFields = true
+            var arrayOfNodes = NSMutableArray()
+            arrayOfNodes.addObject(wall1)
+            arrayOfNodes.addObject(wall2)
+            arrayOfNodes.addObject(wall3)
+            //        arrayOfNodes.addObject(backWall)
+            particles.colliderNodes = arrayOfNodes as [AnyObject]
+            let atomsNode = SCNNode()
+            atomsNode.addParticleSystem(particles)
+            atomsNode.position.x += 140
+            scene.rootNode.addChildNode(atomsNode)
+        }
         
         scene.rootNode.addChildNode(room2)
         
