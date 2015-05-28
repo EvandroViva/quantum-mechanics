@@ -40,7 +40,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var particles: SCNParticleSystem!
     
 
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,27 +71,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scene.rootNode.addChildNode(cameraNode)
         
         
-        let scene2 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
-        electron = scene2.rootNode.childNodeWithName("electro", recursively: true)!
         
-        electron.position = SCNVector3(x: 65, y: 0, z: 0)
-        electron.scale = SCNVector3Make(0.9, 0.9, 0.9)
-        scene.rootNode.addChildNode(electron)
         
-        let spin = CABasicAnimation(keyPath: "rotation")
-        spin.fromValue = NSValue(SCNVector4: SCNVector4(x: 1, y: 1, z: 0, w: 0))
-        spin.toValue = NSValue(SCNVector4: SCNVector4(x: 1, y:1, z: 0, w: 2 * Float(M_PI)))
-        spin.duration = 2
-        spin.repeatCount = .infinity
-        electron.addAnimation(spin, forKey: "spin around")
         
-         let scene3 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
-        let electron2 = scene3.rootNode.childNodeWithName("electro", recursively: true)!
-        electron2.addAnimation(spin, forKey: "spin around")
-
-        electron2.position = SCNVector3(x: 75, y: 0, z: 0)
-        electron2.scale = SCNVector3Make(0.9, 0.9, 0.9)
-        scene.rootNode.addChildNode(electron2)
         
         
         // place the camera
@@ -132,7 +114,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         
         
-        
+        placeElectrons()
         
         
        
@@ -140,7 +122,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             for var i = 1; i < 16; ++i{
                 
-                arrayOfWaves.addObject(SCNScene(named: "art.scnassets/frames/\(i).dae")!.rootNode)
+                arrayOfWaves.addObject(SCNScene(named: "art.scnassets/Waves/\(i).dae")!.rootNode)
                 println(i)
             }
         
@@ -150,8 +132,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         for var i = 1; i < 3; ++i{
             let electron = scene.rootNode.childNodeWithName("\(i)", recursively: true)!
+            
             electron.hidden = true
             let orbit = scene.rootNode.childNodeWithName("orbit\(i)", recursively: true)!
+            
             orbit.hidden = true
         }
         
@@ -262,6 +246,57 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         backButton.hidden = true
         cameraButton.hidden = true
         
+    }
+    
+    func placeElectrons(){
+        let scene2 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
+        electron = scene2.rootNode.childNodeWithName("electro", recursively: true)!
+        var electronM = scene2.rootNode.childNodeWithName("nucleo", recursively: true)!
+        electronM.geometry?.subdivisionLevel = 2
+        
+        electron.position = SCNVector3(x: 65, y: 0, z: 0)
+        electron.scale = SCNVector3Make(0.9, 0.9, 0.9)
+        
+        
+        let spin = CABasicAnimation(keyPath: "rotation")
+        spin.fromValue = NSValue(SCNVector4: SCNVector4(x: 1, y: 1, z: 0, w: 0))
+        spin.toValue = NSValue(SCNVector4: SCNVector4(x: 1, y:1, z: 0, w: 2 * Float(M_PI)))
+        spin.duration = 2
+        spin.repeatCount = .infinity
+        electron.addAnimation(spin, forKey: "spin around")
+        
+        let scene3 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
+        let electron2 = scene3.rootNode.childNodeWithName("electro", recursively: true)!
+        electron2.addAnimation(spin, forKey: "spin around")
+        let n = scene3.rootNode.childNodeWithName("nucleo", recursively: true)!
+        n.geometry?.subdivisionLevel = 2
+        
+        var material1 = SCNMaterial()
+        material1.diffuse.contents = UIColor(red: 0.7, green: 0.1, blue: 0.2, alpha: 1)
+        material1.specular.contents = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1)
+        material1.emission.contents = UIColor(red: 0.1, green: 0, blue: 0, alpha: 1)
+        material1.shininess = CGFloat(0.1)
+        var material2 = SCNMaterial()
+        material2.diffuse.contents = UIColor(red: 0.47, green: 0.3, blue: 0.9, alpha: 0.8)
+        material2.specular.contents = UIColor(red: 1, green: 0.2, blue: 0.2, alpha: 1)
+        
+        
+        electron2.position = SCNVector3(x: 75, y: 0, z: 0)
+        electron2.scale = SCNVector3Make(0.9, 0.9, 0.9)
+        for var i = 0; i < 3; ++i{
+            var x = electron.childNodeWithName("\(i+1)", recursively: true)!
+            var y = electron.childNodeWithName("orbit\(i+1)", recursively: true)!
+            x.geometry?.firstMaterial = material1
+            y.geometry?.firstMaterial = material2
+           
+            var x2 = electron2.childNodeWithName("\(i+1)", recursively: true)!
+            var y2 = electron2.childNodeWithName("orbit\(i+1)", recursively: true)!
+            x2.geometry?.firstMaterial = material1
+            y2.geometry?.firstMaterial = material2
+            
+        }
+        scene.rootNode.addChildNode(electron)
+        scene.rootNode.addChildNode(electron2)
     }
     
     func moveToExperiment2(){
