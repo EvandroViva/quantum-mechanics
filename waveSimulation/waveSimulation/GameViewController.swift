@@ -48,6 +48,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var particles: SCNParticleSystem!
     
     var infoView: UIView!
+    var leapView: UIView!
 
 
     
@@ -116,6 +117,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         scnView.backgroundColor = UIColor.blackColor()
         scnView.delegate = self
         
+        
+        // add a tap gesture recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTap:")
+        var gestureRecognizers = [AnyObject]()
+        gestureRecognizers.append(tapGesture)
+        if let existingGestureRecognizers = scnView.gestureRecognizers {
+            gestureRecognizers.extend(existingGestureRecognizers)
+        }
+        scnView.gestureRecognizers = gestureRecognizers
+        
+    
+    
+    
+        
+        
+        
         //setupFloor()
         
         
@@ -157,7 +174,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             label2 = UILabel(frame : CGRect(x: screenWidth/1.1, y: 20, width: 200, height: 60))
             label1.font = UIFont.systemFontOfSize(17.0)
             label2.font = UIFont.systemFontOfSize(17.0)
+            label1.center = CGPoint(x: screenWidth/4.5, y: screenHeight - 25)
+            label2.center = CGPoint(x: screenWidth/1.25, y: screenHeight - 25)
             
+            infoButton = UIButton(frame : CGRect(x: screenWidth - 180, y: 13, width: 60, height:60 ))
+            
+            infoView = UIView(frame: CGRect(x: 100, y: 100, width: screenWidth - 200, height: screenHeight - 200))
         }
         else
         {
@@ -181,6 +203,23 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             attrs = [NSFontAttributeName : UIFont.systemFontOfSize(20.0)]
         }
         
+        leapView = UIView(frame: CGRect(x: screenWidth / 3, y: 80, width: screenWidth / 1.5 - 20, height: screenHeight - 160))
+        leapView.backgroundColor = UIColor.blackColor()
+        leapView.alpha = 0
+        leapView.layer.borderWidth = 1.0
+        leapView.layer.borderColor = UIColor.whiteColor().CGColor
+        leapView.hidden = true
+        self.view.addSubview(leapView)
+        
+        
+        infoView.backgroundColor = UIColor.blackColor()
+        infoView.alpha = 0.915
+        infoView.layer.borderWidth = 1.0
+        infoView.layer.borderColor = UIColor.whiteColor().CGColor
+        infoView.hidden = true
+        self.view.addSubview(infoView)
+        
+        
         label1.center = CGPoint(x: screenWidth/4.5, y: screenHeight - 25)
         label2.center = CGPoint(x: screenWidth/1.22, y: screenHeight - 25)
         
@@ -197,13 +236,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         infoButton.hidden = true
         self.view.addSubview(infoButton)
         
-        infoView.backgroundColor = UIColor.blackColor()
-        infoView.alpha = 0.915
-        infoView.layer.borderWidth = 1.0
-        infoView.layer.borderColor = UIColor.whiteColor().CGColor
-        infoView.hidden = true
-        self.view.addSubview(infoView)
-        
         leapButton = UIButton(frame: CGRect(x: screenWidth / 4.6, y: screenHeight - 25, width: 60, height: 60))
         leapButton.setTitle("ⓘ", forState: UIControlState.Normal)
         leapButton.titleLabel?.textColor = UIColor.whiteColor()
@@ -215,6 +247,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         classicButton.titleLabel?.textColor = UIColor.whiteColor()
         classicButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
         classicButton.center = CGPoint(x: screenWidth/1.44, y: screenHeight - 24)
+        
+
+
+        
         
         
         Menu.addSubview(leapButton)
@@ -253,15 +289,29 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
     }
     
+    var inLeapDescription = false
+    
     func moveToLeapDescription(){
+        
+        self.inLeapDescription = false
+        leapButton.hidden = true
         SCNTransaction.begin()
         SCNTransaction.setAnimationDuration(0.5)
             electron.position.z -= 36
             electron.position.x -= 1.2
-        
             cameraNode.position.z -= 40
+            center.position.z -= 40
+            leapView.alpha = 0.915
+            leapView.hidden = false
         SCNTransaction.commit()
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            sleep(UInt32(0.6))
+            self.inLeapDescription = true
+        }
     }
+    
+    
     
     func setup(){
         UIApplication.sharedApplication().idleTimerDisabled = true
@@ -404,12 +454,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
         self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
         readyToWave()
-        
+        eletronGoBack()
         inExperiment = 2
         SCNTransaction.commit()
     }
     
     func openMenu(){
+        leapView.hidden = true
+        leapButton.hidden = false
         cameraNode.position = SCNVector3(x: 70, y: 0, z: 15)
         self.cameraNode.eulerAngles.x = 0
         self.cameraNode.eulerAngles.y = 0
@@ -421,22 +473,36 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         rightButton.hidden = false
         leftButton.hidden = false
         backButton.hidden = true
-        
+        infoView.hidden = true
         cameraButton.hidden = true
         infoButton.hidden = true
         label1.hidden = false
         label2.hidden = false
     }
     
+    
     func infoButtonClick(){
         
+        infoView.hidden = false
     }
     
     var backButton: UIButton!
     
+    func eletronGoBack(){
+        if leapView.hidden && inLeapDescription{
+            electron.position.z += 36
+            electron.position.x += 1.2
+            center.position.z += 40
+            
+        }
+        inLeapDescription = false
+    }
     
     func leftButtonClick(){
+        
         print("l")
+        leapButton.hidden = true
+        leapView.hidden = true
         rightButton.enabled = false
         leftButton.enabled = false
         rightButton.hidden = true
@@ -451,7 +517,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     }
     
     func rightButtonClick(){
+        //eletronGoBack()
         print("r")
+        leapButton.hidden = true
+        leapView.hidden = true
         rightButton.enabled = false
         leftButton.enabled = false
         rightButton.hidden = true
@@ -459,6 +528,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         label1.hidden = true
         label2.hidden = true
         wallX.opacity = 1
+        
         backButton.hidden = false
         cameraButton.hidden = false
         infoButton.hidden = false
@@ -510,7 +580,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             wallX = scene.rootNode.childNodeWithName("fade", recursively: true)!
         }
-        
+        eletronGoBack()
         readyToWave()
         room2.hidden = false
         self.cameraNode.constraints = [SCNLookAtConstraint(target: room2center)]
@@ -636,7 +706,22 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
 
     }
-    
+    func handleTap(gestureRecognize: UIGestureRecognizer) {
+        // retrieve the SCNView
+        
+        
+        
+        let scnView = self.view as! SCNView
+        
+        // check what nodes are tapped
+        let p = gestureRecognize.locationInView(scnView)
+        if let hitResults = scnView.hitTest(p, options: nil) {
+            // check that we clicked on at least one object
+            
+            infoView.hidden = true
+            leapView.hidden = true
+        }
+    }
     func updateWave(){
         
         
