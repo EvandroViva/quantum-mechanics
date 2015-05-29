@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2015-05-27T13:31:21Z</created>
-  <modified>2015-05-27T13:31:21Z</modified>
+  <created>2015-05-29T11:34:12Z</created>
+  <modified>2015-05-29T11:34:12Z</modified>
   <unit meter="0.025400"/>
   <up_axis>Z_UP</up_axis>
  </asset>
@@ -896,55 +896,60 @@
  <library_visual_scenes>
   <visual_scene id="scene78">
    <node id="SketchUp" name="SketchUp">
-    <node id="ID2" name="group_0">
-     <matrix>1.9 0 0 -169.5768 0 1 0 156.5559 0 0 1 0 0 0 0 1 </matrix>
-     <instance_geometry url="#ID3">
-      <bind_material>
-       <technique_common>
-        <instance_material symbol="geometryElement10" target="#ID4"/>
-        <instance_material symbol="geometryElement11" target="#ID10"/>
-       </technique_common>
-      </bind_material>
-     </instance_geometry>
+    <node id="w" name="w">
+     <matrix>1 0 0 0 0 1 0 221.0189 0 0 1 0 0 0 0 1 </matrix>
     </node>
-    <node id="group_1" name="group_1">
-     <matrix>1.9 0 0 31.02659 0 1 0 156.5559 0 0 1 0 0 0 0 1 </matrix>
-     <instance_geometry url="#ID14">
-      <bind_material>
-       <technique_common>
-        <instance_material symbol="geometryElement14" target="#ID4"/>
-        <instance_material symbol="geometryElement15" target="#ID10"/>
-       </technique_common>
-      </bind_material>
-     </instance_geometry>
-    </node>
-    <node id="group_2" name="group_2">
-     <matrix>0.64 0 0 -21.46191 0 1 0 156.5559 0 0 1 0 0 0 0 1 </matrix>
-     <instance_geometry url="#ID28">
-      <bind_material>
-       <technique_common>
-        <instance_material symbol="geometryElement18" target="#ID4"/>
-        <instance_material symbol="geometryElement19" target="#ID10"/>
-       </technique_common>
-      </bind_material>
-     </instance_geometry>
-     <node id="group_3" name="center">
-      <matrix>1.428571 0 0 0 0 1 0 11.41732 0 0 1 0 0 0 0 1 </matrix>
-      <instance_geometry url="#mesh25">
+    <node id="Node" name="Node">
+     <matrix>1.9 0 0 -169.5768 0 0.91 0 156.5559 0 0 1 -4.354031 0 0 0 1 </matrix>
+     <node id="ID2" name="group_0">
+      <instance_geometry url="#ID3">
        <bind_material>
         <technique_common>
-         <instance_material symbol="geometryElement22" target="#ID4"/>
-         <instance_material symbol="geometryElement23" target="#ID10"/>
+         <instance_material symbol="geometryElement10" target="#ID4"/>
+         <instance_material symbol="geometryElement11" target="#ID10"/>
         </technique_common>
        </bind_material>
       </instance_geometry>
-      <node id="point" name="point">
-       <matrix>1 0 0 23.87012 0 1 0 -3.051758e-05 0 0 1 0 0 0 0 1 </matrix>
+     </node>
+     <node id="group_1" name="group_1">
+      <matrix>1 0 0 105.5807 0 1 0 0 0 0 1 0 0 0 0 1 </matrix>
+      <instance_geometry url="#ID14">
+       <bind_material>
+        <technique_common>
+         <instance_material symbol="geometryElement14" target="#ID4"/>
+         <instance_material symbol="geometryElement15" target="#ID10"/>
+        </technique_common>
+       </bind_material>
+      </instance_geometry>
+     </node>
+     <node id="group_2" name="group_2">
+      <matrix>0.3368421 0 0 77.95521 0 1 0 0 0 0 1 0 0 0 0 1 </matrix>
+      <instance_geometry url="#ID28">
+       <bind_material>
+        <technique_common>
+         <instance_material symbol="geometryElement18" target="#ID4"/>
+         <instance_material symbol="geometryElement19" target="#ID10"/>
+        </technique_common>
+       </bind_material>
+      </instance_geometry>
+      <node id="group_3" name="center">
+       <matrix>1.428571 0 0 0 0 1 0 11.41732 0 0 1 0 0 0 0 1 </matrix>
+       <instance_geometry url="#mesh25">
+        <bind_material>
+         <technique_common>
+          <instance_material symbol="geometryElement22" target="#ID4"/>
+          <instance_material symbol="geometryElement23" target="#ID10"/>
+         </technique_common>
+        </bind_material>
+       </instance_geometry>
+       <node id="point" name="point">
+        <matrix>1 0 0 23.87012 0 1 0 -3.051758e-05 0 0 1 0 0 0 0 1 </matrix>
+       </node>
       </node>
      </node>
     </node>
     <node id="ID34" name="group_4">
-     <matrix>0.75 0 0 -5.11811 0 1.4175 0 -46.25026 0 0 0.75 8.308098 0 0 0 1 </matrix>
+     <matrix>0.75 0 0 -4.839714 0 1.4175 0 -46.25026 0 0 0.75 8.308098 0 0 0 1 </matrix>
      <node id="node99" name="ID35">
       <matrix>1 0 0 -9.536743e-07 0 1 0 0 0 0 1 5.832018 0 0 0 1 </matrix>
       <instance_geometry url="#ID35">
@@ -1052,7 +1057,7 @@
       </node>
      </node>
      <node id="ID116" name="group_13">
-      <matrix>6.2662 0 0 14.20506 0 1.057056 0 -4.836792 0 0 1.2788 -11.25443 0 0 0 1 </matrix>
+      <matrix>6.2662 0 0 12.76921 0 1.057056 0 -4.836792 0 0 1.2788 -11.25443 0 0 0 1 </matrix>
       <instance_geometry url="#ID117">
        <bind_material>
         <technique_common>
@@ -1067,6 +1072,9 @@
       </instance_geometry>
      </node>
     </node>
+   </node>
+   <node id="text" name="text">
+    <matrix>1 0 0 -138.0366 0 1 0 262.3807 0 0 1 0 0 0 0 1 </matrix>
    </node>
   </visual_scene>
  </library_visual_scenes>
