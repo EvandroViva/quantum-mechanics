@@ -30,6 +30,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var Menu: UIView!
     var leftButton: UIButton!
     var rightButton: UIButton!
+    var infoButton: UIButton!
     
     var leapButton: UIButton!
     var classicButton: UIButton!
@@ -46,6 +47,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     var particles: SCNParticleSystem!
     
+    var infoView: UIView!
 
 
     
@@ -172,6 +174,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             label2.center = CGPoint(x: screenWidth/1.25, y: screenHeight - 25)
             
             
+            infoButton = UIButton(frame : CGRect(x: screenWidth - 180, y: 13, width: 50, height:50 ))
+            
+            infoView = UIView(frame: CGRect(x: 40, y: 40, width: screenWidth - 80, height: screenHeight - 80))
+            
             attrs = [NSFontAttributeName : UIFont.systemFontOfSize(20.0)]
         }
         
@@ -183,6 +189,20 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         label1.textColor = UIColor.whiteColor()
         label2.textColor = UIColor.whiteColor()
         
+        infoButton.setAttributedTitle(NSMutableAttributedString(string: "ⓘ", attributes: [NSFontAttributeName: UIFont.systemFontOfSize(32.0)] ), forState: UIControlState.Normal)
+        infoButton.titleLabel?.font = UIFont(name: "calibri", size: 16)
+        infoButton.titleLabel?.textColor = UIColor.whiteColor()
+        infoButton.center.y = backButton.center.y + 2
+        infoButton.addTarget(self, action: "infoButtonClick", forControlEvents:.TouchUpInside)
+        infoButton.hidden = true
+        self.view.addSubview(infoButton)
+        
+        infoView.backgroundColor = UIColor.blackColor()
+        infoView.alpha = 0.915
+        infoView.layer.borderWidth = 1.0
+        infoView.layer.borderColor = UIColor.whiteColor().CGColor
+        infoView.hidden = true
+        self.view.addSubview(infoView)
         
         leapButton = UIButton(frame: CGRect(x: screenWidth / 4.6, y: screenHeight - 25, width: 60, height: 60))
         leapButton.setTitle("ⓘ", forState: UIControlState.Normal)
@@ -201,6 +221,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         Menu.addSubview(classicButton)
         
         Menu.addSubview(label1)
+        
         Menu.addSubview(label2)
         
         cameraButton.backgroundColor = UIColor.clearColor()
@@ -402,9 +423,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         backButton.hidden = true
         
         cameraButton.hidden = true
-        
+        infoButton.hidden = true
         label1.hidden = false
         label2.hidden = false
+    }
+    
+    func infoButtonClick(){
+        
     }
     
     var backButton: UIButton!
@@ -422,7 +447,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         label2.hidden = true
         moveToExperiment2()
         texture.opacity = 1
-        
+        infoButton.hidden = false
     }
     
     func rightButtonClick(){
@@ -436,6 +461,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         wallX.opacity = 1
         backButton.hidden = false
         cameraButton.hidden = false
+        infoButton.hidden = false
         moveToExperiment1()
     }
     
