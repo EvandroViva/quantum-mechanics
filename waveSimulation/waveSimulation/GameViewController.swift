@@ -38,6 +38,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var label2: UILabel!
     var center: SCNNode!
     var electron: SCNNode!
+    var electron2: SCNNode!
     var scnView: SCNView!
     
     var room2: SCNNode!
@@ -154,8 +155,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             label2 = UILabel(frame : CGRect(x: screenWidth/1.1, y: 20, width: 200, height: 60))
             label1.font = UIFont.systemFontOfSize(17.0)
             label2.font = UIFont.systemFontOfSize(17.0)
-            label1.center = CGPoint(x: screenWidth/4.5, y: screenHeight - 25)
-            label2.center = CGPoint(x: screenWidth/1.25, y: screenHeight - 25)
+            
         }
         else
         {
@@ -174,11 +174,31 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             
             attrs = [NSFontAttributeName : UIFont.systemFontOfSize(20.0)]
         }
-        label1.text = "⬅︎ Quantum behavior ⓘ"
-        label2.text = "ⓘ Classic behavior ➡︎"
+        
+        label1.center = CGPoint(x: screenWidth/4.5, y: screenHeight - 25)
+        label2.center = CGPoint(x: screenWidth/1.22, y: screenHeight - 25)
+        
+        label1.text = "⬅︎ Quantum behavior"
+        label2.text = "Classic behavior ➡︎"
         label1.textColor = UIColor.whiteColor()
         label2.textColor = UIColor.whiteColor()
         
+        
+        leapButton = UIButton(frame: CGRect(x: screenWidth / 4.6, y: screenHeight - 25, width: 60, height: 60))
+        leapButton.setTitle("ⓘ", forState: UIControlState.Normal)
+        leapButton.titleLabel?.textColor = UIColor.whiteColor()
+        leapButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
+        leapButton.center = CGPoint(x: screenWidth/3.2, y: screenHeight - 24)
+        leapButton.addTarget(self, action: "moveToLeapDescription", forControlEvents:.TouchUpInside)
+        classicButton = UIButton(frame: CGRect(x: screenWidth / 1.3, y: screenHeight - 25, width: 60, height: 60))
+        classicButton.setTitle("ⓘ", forState: UIControlState.Normal)
+        classicButton.titleLabel?.textColor = UIColor.whiteColor()
+        classicButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
+        classicButton.center = CGPoint(x: screenWidth/1.44, y: screenHeight - 24)
+        
+        
+        Menu.addSubview(leapButton)
+        Menu.addSubview(classicButton)
         
         Menu.addSubview(label1)
         Menu.addSubview(label2)
@@ -200,7 +220,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         backButton.backgroundColor = nil
         
-        backButton.setAttributedTitle(NSMutableAttributedString(string: "Menu", attributes: attrs ), forState: UIControlState.Normal)
+        backButton.setAttributedTitle(NSMutableAttributedString(string: "Back", attributes: attrs ), forState: UIControlState.Normal)
         backButton.titleLabel?.font = UIFont(name: "calibri", size: 16)
         backButton.titleLabel?.textColor = UIColor.whiteColor()
         backButton.addTarget(self, action: "openMenu", forControlEvents:.TouchUpInside)
@@ -210,6 +230,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         backButton.hidden = true
         cameraButton.hidden = true
         
+    }
+    
+    func moveToLeapDescription(){
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationDuration(0.5)
+            electron.position.z -= 36
+            electron.position.x -= 1.2
+        
+            cameraNode.position.z -= 40
+        SCNTransaction.commit()
     }
     
     func setup(){
@@ -308,7 +338,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         electron.addAnimation(spin, forKey: "spin around")
         
         let scene3 = SCNScene(named: "art.scnassets/fastOrbit.dae")!
-        let electron2 = scene3.rootNode.childNodeWithName("electro", recursively: true)!
+        electron2 = scene3.rootNode.childNodeWithName("electro", recursively: true)!
         electron2.addAnimation(spin, forKey: "spin around")
         let n = scene3.rootNode.childNodeWithName("nucleo", recursively: true)!
         n.geometry?.subdivisionLevel = 2
@@ -474,7 +504,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func leap(){
         
         if layerCounter == 1{
-            let electron2 = scene.rootNode.childNodeWithName("3", recursively: true)!
+            electron2 = scene.rootNode.childNodeWithName("3", recursively: true)!
             let orbit2 = scene.rootNode.childNodeWithName("orbit3", recursively: true)!
             electron2.hidden = false
             orbit2.hidden = false
