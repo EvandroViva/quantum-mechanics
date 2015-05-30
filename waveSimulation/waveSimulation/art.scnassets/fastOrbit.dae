@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2015-05-28T17:55:34Z</created>
-  <modified>2015-05-28T17:55:34Z</modified>
+  <created>2015-05-29T17:30:23Z</created>
+  <modified>2015-05-29T17:30:23Z</modified>
   <unit meter="0.010000"/>
   <up_axis>Y_UP</up_axis>
  </asset>
@@ -97,7 +97,7 @@
        <color>0.440274 0.440284 0.440279 1</color>
       </ambient>
       <diffuse>
-       <color>1 0.282417 0 1</color>
+       <color>0.0756718 0.119932 0.671782 1</color>
       </diffuse>
       <specular>
        <color>1 0.633957 0.700393 1</color>
@@ -106,7 +106,7 @@
        <float>0.149888</float>
       </shininess>
       <reflective>
-       <color>0.943368 0.13626 0 1</color>
+       <color>0 0.769353 0.933986 1</color>
       </reflective>
       <transparent opaque="RGB_ZERO">
        <color>0 0 0 1</color>
@@ -121,7 +121,7 @@
      <extra>
       <technique profile="SceneKit">
        <multiply>
-        <color>0.375487 0.197127 0.332239 1</color>
+        <color>0 0.652299 0.658613 1</color>
        </multiply>
       </technique>
      </extra>

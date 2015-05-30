@@ -26,7 +26,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var frame = 0
     
     var cameraPoint = 0
-
+    var lightNode: SCNNode!
+    var lightNode2: SCNNode!
     var Menu: UIView!
     var leftButton: UIButton!
     var rightButton: UIButton!
@@ -180,6 +181,17 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             infoButton = UIButton(frame : CGRect(x: screenWidth - 180, y: 13, width: 60, height:60 ))
             
             infoView = UIView(frame: CGRect(x: 100, y: 100, width: screenWidth - 200, height: screenHeight - 200))
+            
+            leapView = UIView(frame: CGRect(x: screenWidth / 3, y: 80, width: screenWidth / 1.5 - 20, height: screenHeight - 160))
+            
+            label1.center = CGPoint(x: screenWidth/4.5, y: screenHeight - 25)
+            label2.center = CGPoint(x: screenWidth/1.22, y: screenHeight - 25)
+            
+            leapButton = UIButton(frame: CGRect(x: screenWidth / 4.6, y: screenHeight - 25, width: 60, height: 60))
+            classicButton = UIButton(frame: CGRect(x: screenWidth / 1.3, y: screenHeight - 25, width: 60, height: 60))
+            classicButton.center = CGPoint(x: screenWidth/1.44, y: screenHeight - 24)
+            leapButton.center = CGPoint(x: screenWidth/3.2, y: screenHeight - 24)
+            
         }
         else
         {
@@ -188,22 +200,30 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
             cameraButton = UIButton(frame : CGRect(x:screenWidth - 80, y: 10, width: 50, height:44))
             backButton = UIButton(frame : CGRect(x: 10, y: 10, width: 60, height: 40))
             
-            label1 = UILabel(frame : CGRect(x: screenWidth/4.8, y: 20, width: 160, height: 60))
+            label1 = UILabel(frame : CGRect(x: screenWidth/4.8, y: 20, width: 180, height: 60))
             
-            label2 = UILabel(frame : CGRect(x: screenWidth/1.1, y: 20, width: 150, height: 60))
+            label2 = UILabel(frame : CGRect(x: screenWidth/1.1, y: 20, width: 180, height: 60))
             
-            label1.center = CGPoint(x: screenWidth/4, y: screenHeight - 25)
-            label2.center = CGPoint(x: screenWidth/1.25, y: screenHeight - 25)
+            label1.center = CGPoint(x: screenWidth/4.4, y: screenHeight - 25)
+            label2.center = CGPoint(x: screenWidth/1.153, y: screenHeight - 25)
             
-            
+            leapView = UIView(frame: CGRect(x: screenWidth / 3, y: 40, width: screenWidth / 1.5 - 20, height: screenHeight - 80))
             infoButton = UIButton(frame : CGRect(x: screenWidth - 180, y: 13, width: 50, height:50 ))
             
             infoView = UIView(frame: CGRect(x: 40, y: 40, width: screenWidth - 80, height: screenHeight - 80))
             
-            attrs = [NSFontAttributeName : UIFont.systemFontOfSize(20.0)]
+            leapButton = UIButton(frame: CGRect(x: screenWidth / 5, y: screenHeight - 25, width: 60, height: 60))
+            classicButton = UIButton(frame: CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 60, height: 60))
+            
+            classicButton.center = CGPoint(x: screenWidth/1.46, y: screenHeight - 24)
+            leapButton.center = CGPoint(x: screenWidth/3.15, y: screenHeight - 24)
+            
+            label1.font = UIFont.systemFontOfSize(12.0)
+            label2.font = UIFont.systemFontOfSize(12.0)
+            attrs = [NSFontAttributeName : UIFont.systemFontOfSize(17.0)]
         }
         
-        leapView = UIView(frame: CGRect(x: screenWidth / 3, y: 80, width: screenWidth / 1.5 - 20, height: screenHeight - 160))
+        
         leapView.backgroundColor = UIColor.blackColor()
         leapView.alpha = 0
         leapView.layer.borderWidth = 1.0
@@ -211,6 +231,34 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         leapView.hidden = true
         self.view.addSubview(leapView)
         
+        var textView = UITextView(frame: CGRect(x: 20, y: 60, width: leapView.bounds.width - 40, height: leapView.bounds.height - 80))
+        textView.text = "This is a Quantum representation of a atom.\nIn Quantum-mechanics some particles have weird behaviors.\nWhen you cast light in to a electron he does absorb that energy and that result in him changing his energy level.\nThe weird thing is, when that happens the electron will just leap from one energy level to the other without travelling the space in between and with no interval of time.\n"
+        textView.textColor = UIColor.whiteColor()
+        textView.backgroundColor = UIColor.clearColor()
+        textView.font = UIFont.systemFontOfSize(23)
+        textView.textAlignment = NSTextAlignment.Justified
+        textView.editable = false
+        leapView.addSubview(textView)
+        
+        var textView2 = UITextView(frame: CGRect(x: 20, y: 60, width: infoView.bounds.width - 40, height: infoView.bounds.height - 80))
+        textView2.text = "This is the double slit experiment.\nIn 1909 most cientist still argue about if light was a wave or a particle.\nIn order to prove one or other they have prepared this experiment so they could test their theories.\nWhen the experiment was realized they have found something very peculiar.\nThe experiment had diferent results was performed with an observer."
+        textView2.textColor = UIColor.whiteColor()
+        textView2.backgroundColor = UIColor.clearColor()
+        textView2.font = UIFont.systemFontOfSize(23)
+        textView2.textAlignment = NSTextAlignment.Justified
+        textView2.editable = false
+        infoView.addSubview(textView2)
+        
+        var l = UILabel(frame: CGRect(x: leapView.bounds.width, y: 10, width: 300, height: 44))
+        l.center = CGPoint(x: leapView.center.x/2, y: 24)
+        l.text = "Quantum Leap"
+        l.textAlignment = NSTextAlignment.Center
+        l.textColor = UIColor.whiteColor()
+        l.font = UIFont.systemFontOfSize(27)
+        leapView.addSubview(l)
+        
+        classicButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
+        leapButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
         
         infoView.backgroundColor = UIColor.blackColor()
         infoView.alpha = 0.915
@@ -220,8 +268,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         self.view.addSubview(infoView)
         
         
-        label1.center = CGPoint(x: screenWidth/4.5, y: screenHeight - 25)
-        label2.center = CGPoint(x: screenWidth/1.22, y: screenHeight - 25)
+       
         
         label1.text = "⬅︎ Quantum behavior"
         label2.text = "Classic behavior ➡︎"
@@ -236,17 +283,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         infoButton.hidden = true
         self.view.addSubview(infoButton)
         
-        leapButton = UIButton(frame: CGRect(x: screenWidth / 4.6, y: screenHeight - 25, width: 60, height: 60))
+        
         leapButton.setTitle("ⓘ", forState: UIControlState.Normal)
         leapButton.titleLabel?.textColor = UIColor.whiteColor()
-        leapButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
-        leapButton.center = CGPoint(x: screenWidth/3.2, y: screenHeight - 24)
+        
         leapButton.addTarget(self, action: "moveToLeapDescription", forControlEvents:.TouchUpInside)
-        classicButton = UIButton(frame: CGRect(x: screenWidth / 1.3, y: screenHeight - 25, width: 60, height: 60))
+
         classicButton.setTitle("ⓘ", forState: UIControlState.Normal)
         classicButton.titleLabel?.textColor = UIColor.whiteColor()
-        classicButton.titleLabel?.font = UIFont.systemFontOfSize(21.0)
-        classicButton.center = CGPoint(x: screenWidth/1.44, y: screenHeight - 24)
+        
         
 
 
@@ -292,7 +337,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     var inLeapDescription = false
     
     func moveToLeapDescription(){
-        
+        backButton.hidden = false
+        classicButton.hidden = true
         self.inLeapDescription = false
         leapButton.hidden = true
         SCNTransaction.begin()
@@ -343,19 +389,18 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         center.position = SCNVector3(x: 70, y: 0, z: 0)
         
         // create and add a light to the scene
-        let lightNode = SCNNode()
+        lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
         lightNode.position = SCNVector3(x: 15, y: 10, z: 10)
         lightNode.light?.color = UIColor.grayColor()
         scene.rootNode.addChildNode(lightNode)
-        
-        var lightNode2: SCNNode = lightNode.clone() as! SCNNode
+        lightNode2 = lightNode.clone() as! SCNNode
         lightNode2.position = SCNVector3(x: 140, y: 10, z: -26)
         lightNode2.light!.type = SCNLightTypeOmni
-        lightNode.light?.color = UIColor.grayColor()
+        lightNode2.light?.color = UIColor.grayColor()
         scene.rootNode.addChildNode(lightNode2)
-        
+        lightNode2.hidden = true
         //        // create and add a third light to the scene
         //        let lightNode3 = SCNNode()
         //        lightNode3.light = SCNLight()
@@ -377,16 +422,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         placeElectrons()
         
         
-        if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad)
-        {
-            // Ipad
-            
-        }
-        else
-        {
-            // Iphone
-            
-        }
+        
     }
     
     func placeElectrons(){
@@ -419,13 +455,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         
         var material1 = SCNMaterial()
-        material1.diffuse.contents = UIColor(red: 0.7, green: 0.1, blue: 0.2, alpha: 1)
-        material1.specular.contents = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1)
-        material1.emission.contents = UIColor(red: 0.1, green: 0, blue: 0, alpha: 1)
+        material1.diffuse.contents = UIColor(red: 0.5, green: 0.1, blue: 1, alpha: 1)
+        material1.specular.contents = UIColor(red: 0.5, green: 0.2, blue: 0.8, alpha: 1)
+        material1.emission.contents = UIColor(red: 0.2, green: 0, blue: 0.4, alpha: 1)
         material1.shininess = CGFloat(0.1)
         var material2 = SCNMaterial()
-        material2.diffuse.contents = UIColor(red: 0.47, green: 0.3, blue: 0.9, alpha: 0.8)
+        material2.diffuse.contents = UIColor(red: 0.4, green: 0.15, blue: 0.7, alpha: 0.8)
         material2.specular.contents = UIColor(red: 1, green: 0.2, blue: 0.2, alpha: 1)
+//        material2.emission.contents = UIColor(red: 0.05, green: 0, blue: 0.1, alpha: 1)
         
         
         electron2.position = SCNVector3(x: 75, y: 0, z: 0)
@@ -447,12 +484,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     }
     
     func moveToExperiment2(){
+        let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
+        self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
         SCNTransaction.begin()
         SCNTransaction.setAnimationDuration(0.5)
         self.cameraNode.position = SCNVector3(x: 3.5, y: 15, z: 60)
         self.cameraPoint = 1
-        let point = self.scene.rootNode.childNodeWithName("point", recursively: true)!
-        self.cameraNode.constraints = [SCNLookAtConstraint(target: point)] // pov is the camera
+        
+  
         readyToWave()
         eletronGoBack()
         inExperiment = 2
@@ -460,12 +499,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     }
     
     func openMenu(){
+        
+        eletronGoBack()
+        lightNode2.hidden = true
+        lightNode.hidden = false
         leapView.hidden = true
         leapButton.hidden = false
-        cameraNode.position = SCNVector3(x: 70, y: 0, z: 15)
-        self.cameraNode.eulerAngles.x = 0
-        self.cameraNode.eulerAngles.y = 0
-        self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
+        classicButton.hidden = false
+        
         cameraNode.camera?.xFov = 60
         room2.hidden = true
         rightButton.enabled = true
@@ -478,21 +519,35 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         infoButton.hidden = true
         label1.hidden = false
         label2.hidden = false
+        self.cameraNode.constraints = [SCNLookAtConstraint(target: center)] // pov is the camera
+        SCNTransaction.begin()
+        SCNTransaction.setAnimationDuration(0.5)
+        cameraNode.position = SCNVector3(x: 70, y: 0, z: 15)
+        self.cameraNode.eulerAngles.x = 0
+        self.cameraNode.eulerAngles.y = 0
+        
+        SCNTransaction.commit()
     }
     
     
     func infoButtonClick(){
-        
-        infoView.hidden = false
+        if infoView.hidden{
+            infoView.hidden = false
+        }else{
+            infoView.hidden = true
+        }
     }
     
     var backButton: UIButton!
     
     func eletronGoBack(){
-        if leapView.hidden && inLeapDescription{
+        if inLeapDescription{
+            SCNTransaction.begin()
+            SCNTransaction.setAnimationDuration(0.5)
             electron.position.z += 36
             electron.position.x += 1.2
             center.position.z += 40
+            SCNTransaction.commit()
             
         }
         inLeapDescription = false
@@ -501,6 +556,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func leftButtonClick(){
         
         print("l")
+        lightNode.hidden = false
+        classicButton.hidden = true
+        lightNode2.hidden = false
         leapButton.hidden = true
         leapView.hidden = true
         rightButton.enabled = false
@@ -519,6 +577,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     func rightButtonClick(){
         //eletronGoBack()
         print("r")
+        lightNode.hidden = true
+        lightNode2.hidden = false
+        classicButton.hidden = true
         leapButton.hidden = true
         leapView.hidden = true
         rightButton.enabled = false
@@ -630,7 +691,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
     
     
     func changeCameraView(){
-      
+      infoView.hidden = true
         if inExperiment == 1{
             //fim
             switch self.cameraPoint{
@@ -668,7 +729,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
                 self.cameraNode.eulerAngles.x = 0
                 self.cameraPoint = 1
             case 1:
-                self.cameraNode.position = SCNVector3(x: 3.35, y: 10, z: 15)
+                if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+                {
+                    // Ipad
+                    self.cameraNode.position = SCNVector3(x: 3.35, y: 10, z: 14)
+                }else{
+                    //iPhone
+                    self.cameraNode.position = SCNVector3(x: 3.35, y: 10, z: 15)
+                }
                 self.cameraPoint = 2
                 self.cameraNode.eulerAngles.x = 0
             case 2:
@@ -714,12 +782,18 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         let scnView = self.view as! SCNView
         
         // check what nodes are tapped
-        let p = gestureRecognize.locationInView(scnView)
+        let p = gestureRecognize.locationInView(view)
         if let hitResults = scnView.hitTest(p, options: nil) {
             // check that we clicked on at least one object
+            if let x = view.hitTest(p, withEvent: nil){
+                if !x.isDescendantOfView(infoView){
+                    infoView.hidden = true
+                }
+                if !x.isDescendantOfView(leapView){
+                    leapView.hidden = true
+                }
+            }
             
-            infoView.hidden = true
-            leapView.hidden = true
         }
     }
     func updateWave(){
@@ -766,7 +840,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate, SCNPhysics
         
         
         if alphaValue > 0{
-            alphaValue -= 0.0005
+            if alphaValue > 0.7 {
+                alphaValue -= 0.0008
+            }else{
+                alphaValue -= 0.0005
+            }
             texture.opacity = alphaValue
             wallX.opacity = alphaValue
         }
