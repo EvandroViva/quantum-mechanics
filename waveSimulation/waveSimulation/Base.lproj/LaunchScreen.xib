@@ -2,7 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -12,29 +13,68 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2015 Fernando Lucheti. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="20" y="439" width="441" height="21"/>
+                    <rect key="frame" x="20" y="439" width="440" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.28424873737373735" green="0.28424873737373735" blue="0.28424873737373735" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="highlightedColor" red="0.75554806019910659" green="0.2556641231781312" blue="0.78598484850000006" alpha="1" colorSpace="calibratedRGB"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quantum Mechanix" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="140" width="441" height="43"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                    <color key="textColor" red="0.42627446338383834" green="0.42627446338383834" blue="0.42627446338383834" alpha="1" colorSpace="calibratedRGB"/>
-                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="LaunchAtom2.png" translatesAutoresizingMaskIntoConstraints="NO" id="Hbg-xM-tv8">
+                    <rect key="frame" x="50" y="50" width="380" height="339"/>
+                    <color key="tintColor" red="0.63489585816023697" green="0.94604108401466558" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="Hbg-xM-tv8" secondAttribute="height" multiplier="1:1" id="rYy-YF-ZZT"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="rYy-YF-ZZT"/>
+                        </mask>
+                    </variation>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" constant="1" id="5cJ-9S-tgC"/>
-                <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
+                <constraint firstItem="Hbg-xM-tv8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" constant="80" id="3Xw-V3-FyE"/>
+                <constraint firstAttribute="centerX" secondItem="Hbg-xM-tv8" secondAttribute="centerX" id="3yY-ta-QCE"/>
+                <constraint firstAttribute="trailing" secondItem="Hbg-xM-tv8" secondAttribute="trailing" constant="40" id="Aea-v7-aOu"/>
+                <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="Hbg-xM-tv8" secondAttribute="bottom" constant="50" id="Hmp-es-D9X"/>
                 <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
+                <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="Hbg-xM-tv8" secondAttribute="bottom" constant="50" id="RNR-5D-8yP"/>
+                <constraint firstItem="Hbg-xM-tv8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="50" id="T1J-6L-ZYA"/>
+                <constraint firstItem="Hbg-xM-tv8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="50" id="WsY-UK-mIZ"/>
+                <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="Hbg-xM-tv8" secondAttribute="bottom" constant="160" id="XJ8-su-DSO"/>
+                <constraint firstAttribute="centerY" secondItem="Hbg-xM-tv8" secondAttribute="centerY" id="YJ9-TE-A2K"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
+                <constraint firstItem="Hbg-xM-tv8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="dxI-vO-Idh"/>
+                <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="eRx-IF-YCW"/>
+                <constraint firstItem="Hbg-xM-tv8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="40" id="fZq-c9-g16"/>
+                <constraint firstItem="8ie-xW-0ye" firstAttribute="top" secondItem="Hbg-xM-tv8" secondAttribute="bottom" constant="80" id="gYP-jE-Koa"/>
+                <constraint firstAttribute="trailing" secondItem="Hbg-xM-tv8" secondAttribute="trailing" constant="50" id="pBs-rC-134"/>
+                <constraint firstItem="Hbg-xM-tv8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" constant="80" id="wZ5-WV-9CJ"/>
+                <constraint firstAttribute="trailingMargin" secondItem="Hbg-xM-tv8" secondAttribute="trailing" constant="80" id="yj0-kD-Yjg"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="3Xw-V3-FyE"/>
+                    <exclude reference="3yY-ta-QCE"/>
+                    <exclude reference="Aea-v7-aOu"/>
+                    <exclude reference="YJ9-TE-A2K"/>
+                    <exclude reference="dxI-vO-Idh"/>
+                    <exclude reference="fZq-c9-g16"/>
+                    <exclude reference="wZ5-WV-9CJ"/>
+                    <exclude reference="yj0-kD-Yjg"/>
+                    <exclude reference="Hmp-es-D9X"/>
+                    <exclude reference="XJ8-su-DSO"/>
+                    <exclude reference="ZEH-qu-HZ9"/>
+                    <exclude reference="gYP-jE-Koa"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="548" y="455"/>
         </view>
     </objects>
+    <resources>
+        <image name="LaunchAtom2.png" width="600" height="600"/>
+    </resources>
 </document>

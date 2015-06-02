@@ -18,6 +18,8 @@
 		8B9957AD1B0B507D009A11B2 /* waveSimulationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9957AC1B0B507D009A11B2 /* waveSimulationTests.swift */; };
 		8BCC06841B15E3DB0048E5D7 /* atoms.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 8BCC06831B15E3DB0048E5D7 /* atoms.scnp */; };
 		8BCC06861B15E5E70048E5D7 /* bokeh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCC06851B15E5E70048E5D7 /* bokeh.png */; };
+		8BF3E2811B1AB1BB002BDB2D /* LaunchAtom.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF3E2801B1AB1BB002BDB2D /* LaunchAtom.png */; };
+		8BF3E2831B1AB337002BDB2D /* LaunchAtom2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF3E2821B1AB337002BDB2D /* LaunchAtom2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		8B9957AC1B0B507D009A11B2 /* waveSimulationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = waveSimulationTests.swift; sourceTree = "<group>"; };
 		8BCC06831B15E3DB0048E5D7 /* atoms.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = atoms.scnp; sourceTree = "<group>"; };
 		8BCC06851B15E5E70048E5D7 /* bokeh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bokeh.png; sourceTree = "<group>"; };
+		8BF3E2801B1AB1BB002BDB2D /* LaunchAtom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchAtom.png; sourceTree = "<group>"; };
+		8BF3E2821B1AB337002BDB2D /* LaunchAtom2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchAtom2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +94,8 @@
 				8BCC06831B15E3DB0048E5D7 /* atoms.scnp */,
 				8B0731071B1605C60064D074 /* camera.png */,
 				8B0731051B1604B70064D074 /* Camera-50.png */,
+				8BF3E2801B1AB1BB002BDB2D /* LaunchAtom.png */,
+				8BF3E2821B1AB337002BDB2D /* LaunchAtom2.png */,
 				8BCC06851B15E5E70048E5D7 /* bokeh.png */,
 				8B9957941B0B507D009A11B2 /* AppDelegate.swift */,
 				8B9957961B0B507D009A11B2 /* art.scnassets */,
@@ -212,8 +218,10 @@
 				8B0731061B1604B70064D074 /* Camera-50.png in Resources */,
 				8B9957971B0B507D009A11B2 /* art.scnassets in Resources */,
 				8BCC06841B15E3DB0048E5D7 /* atoms.scnp in Resources */,
+				8BF3E2811B1AB1BB002BDB2D /* LaunchAtom.png in Resources */,
 				8B99579C1B0B507D009A11B2 /* Main.storyboard in Resources */,
 				8B0731081B1605C60064D074 /* camera.png in Resources */,
+				8BF3E2831B1AB337002BDB2D /* LaunchAtom2.png in Resources */,
 				8BCC06861B15E5E70048E5D7 /* bokeh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
